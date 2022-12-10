@@ -48,5 +48,27 @@ func visible(input: seq[string]): int =
       if visible:
         inc result
 
+func scenicScores(input: seq[string]): seq[int] =
+  for idxRow in 0 .. input.high:
+    let row = input[idxRow]
+    for idxCol in 0 .. row.high:
+      let tree = row[idxCol]
+      var left, right, up, down = 0
+      for idxLeft in countdown(idxCol - 1, 0):
+        inc left
+        if row[idxLeft] >= tree: break
+      for idxRight in idxCol + 1 .. row.high:
+        inc right
+        if row[idxRight] >= tree: break
+      for idxUp in countdown(idxRow - 1, 0):
+        inc up
+        if input[idxUp][idxCol] >= tree: break
+      for idxDown in idxRow + 1 .. input.high:
+        inc down
+        if input[idxDown][idxCol] >= tree: break
+      result.add left * right * up * down
+
 echo "Example one: ", example.visible
 echo "Part one: ", input.visible
+echo "Example two: ", example.scenicScores[7], "; ", example.scenicScores[17]
+echo "Part two: ", input.scenicScores.max
